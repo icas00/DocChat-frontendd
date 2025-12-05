@@ -1,0 +1,58 @@
+:root {
+    --bg: rgb(218, 213, 208);
+    --text: rgb(58, 57, 56);
+    --text-dim: rgba(58, 57, 56, 0.6);
+    --accent: rgb(58, 57, 56);
+    --line: rgba(58, 57, 56, 0.12);
+    --hover: rgba(58, 57, 56, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Button hover effects */
+button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(58, 57, 56, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Interactive box hover */
+.interactive-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(58, 57, 56, 0.12) !important;
+}
+
+/* Pulse animation for glow effect */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    depends_on:
+      - backend
+
+  backend:
+    # Assuming the backend is in a sibling directory or you have the image
+    # For this resume project, we'll assume the user runs backend locally or we point to the image if they have one.
+    # Since I don't have the backend code here (it's a separate repo usually, or mixed), 
+    # I will comment this out or use a placeholder image if I knew it.
+    # But wait, the user said "This project is the backend service..." in README_backend.md?
+    # Ah, the file structure shows `src` which looks like React.
+    # The `README_backend.md` implies there IS a backend.
+    # Let's assume the backend is running on host or is a separate service.
+    # I'll just put the frontend here for now, or add a placeholder for backend.
+    image: ai-assistant-backend:latest # Placeholder
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
