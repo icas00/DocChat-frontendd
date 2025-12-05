@@ -1,89 +1,156 @@
-# UI-DocChat: Embeddable AI Chat Widget
+# DocuChat Frontend
 
-![Project Banner](https://via.placeholder.com/1200x400?text=UI-DocChat+Banner)
+![Project Status](https://img.shields.io/badge/status-active-success.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.0-lightgrey.svg)
+![Tech](https://img.shields.io/badge/tech-React%20%7C%20Vite%20%7C%20Anime.js-blueviolet.svg)
 
-> **Note:** This project is a demonstration of a modern, embeddable AI chat widget designed for multi-tenant SaaS platforms. It features a React frontend and a Spring Boot backend (documented separately).
+**DocuChat** is a sophisticated, AI-powered document assistance platform. This frontend application provides a dual-interface system: a comprehensive **Admin Dashboard** for managing AI agents and documents, and a highly embeddable **Chat Widget** for end-user interaction.
 
-## 🚀 Project Overview
+---
 
-UI-DocChat is a client-side library and dashboard that allows businesses to embed a custom AI chatbot into their websites. The chatbot uses RAG (Retrieval-Augmented Generation) to answer user queries based on uploaded documents.
+## 📖 Table of Contents
+- [Features](#-features)
+- [Technical Architecture](#-technical-architecture)
+- [Installation & Setup](#-installation--setup)
+- [Configuration](#-configuration)
+- [API Integration & Security](#-api-integration--security)
+- [Project Structure](#-project-structure)
 
-**Key Features:**
-- **Embeddable Widget:** A single script tag adds a fully functional chat widget to any HTML page.
-- **Customizable UI:** Clients can match the widget's color, name, and welcome message to their brand.
-- **Real-time Streaming:** Smooth, typewriter-style responses using Server-Sent Events (SSE).
-- **Multi-Tenant Support:** Securely isolated data for each client.
+---
 
-## 🛠️ Tech Stack
+## 🚀 Features
 
-- **Frontend:** React 19, Vite, TailwindCSS (via CSS variables/modules), Lucide React
-- **Backend:** Java 17, Spring Boot 3, PostgreSQL (pgvector), LangChain4j (implied)
-- **Deployment:** Docker, Nginx
+### 🛠 Administrative Dashboard
+*   **Client Management**: Create and configure distinct AI assistants for different clients or use cases.
+*   **Document Ingestion**: Securely upload PDF documents to knowledge bases.
+*   **Real-time Indexing**: Trigger backend vectorization processes to update AI knowledge instantly.
+*   **Customization**: Live preview of widget settings including:
+    *   Bot Name
+    *   Welcome Message
+    *   Brand Color Scheme
 
-## 🏃‍♂️ Getting Started
+### 💬 Client Widget
+*   **Embeddable Design**: Zero-dependency script for easy integration into any website.
+*   **Interactive UI**: Smooth animations powered by Lottie and Anime.js.
+*   **Contextual Awareness**: Session persistence to maintain chat history across page reloads.
+
+---
+
+## 🏗 Technical Architecture
+
+This project is built as a static Single Page Application (SPA), optimized for performance and ease of deployment.
+
+| Category | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Framework** | [React 19](https://react.dev/) | Core UI library for component-based architecture. |
+| **Build Tool** | [Vite](https://vitejs.dev/) | Next-generation frontend tooling for fast builds. |
+| **Routing** | [React Router v7](https://reactrouter.com/) | Client-side routing for the Admin dashboard. |
+| **Animation** | [Anime.js](https://animejs.com/) & [Lottie](https://airbnb.io/lottie/) | High-fidelity UI transitions and character animations. |
+| **Icons** | [Lucide React](https://lucide.dev/) | Clean, consistent SVG iconography. |
+
+---
+
+## ⚡ Installation & Setup
 
 ### Prerequisites
-- Node.js 18+
-- Docker (optional, for containerized run)
+*   Node.js (v18+ recommended)
+*   npm or yarn
 
-### Local Development
+### Steps
 
-1.  **Clone the repository:**
+1.  **Clone the Repository**
     ```bash
-    git clone https://github.com/yourusername/ui-docchat.git
-    cd ui-docchat
+    git clone https://github.com/your-org/docuchat-frontend.git
+    cd docuchat-frontend
     ```
 
-2.  **Install dependencies:**
+2.  **Install Dependencies**
     ```bash
     npm install
     ```
 
-3.  **Configure Environment:**
-    Copy `.env.example` to `.env` and update the values.
-    ```bash
-    cp .env.example .env
-    ```
-    *Set `VITE_API_BASE_URL` to your backend URL (default: `http://localhost:8080`).*
-
-4.  **Run the dev server:**
+3.  **Start Development Server**
     ```bash
     npm run dev
     ```
-    Access the app at `http://localhost:5173`.
+    Access the application at `http://localhost:5173`.
 
-### 🐳 Docker Deployment
+4.  **Production Build**
+    ```bash
+    npm run build
+    ```
+    Output files will be generated in the `dist/` directory, ready for static hosting (Vercel, Netlify, Github Pages).
 
-Build and run the frontend container:
+---
 
-```bash
-docker-compose up --build
+## ⚙ Configuration
+
+The application relies on environment variables for API connectivity. Create a `.env` file in the root directory:
+
+```env
+# URL for the backend API service
+VITE_API_BASE_URL=https://icas00-docchat.hf.space
 ```
 
-The application will be available at `http://localhost:3000`.
+> **Note**: If not provided, the application may default to hardcoded fallbacks for development. It is strongly recommended to define this variable.
+
+---
+
+## 🔐 API Integration & Security
+
+The frontend interacts with the backend using a **Dual-Key Authentication System**.
+
+### 1. Security Keys
+
+| Key Type | Header / Attribute | Source | Usage |
+| :--- | :--- | :--- | :--- |
+| **Admin Key** | `X-Admin-Key` | Generated on `/create` | **Critical**. Used for sensitive operations like uploading files, changing settings, and deleting data. Stored in Session Storage. |
+| **Widget Key** | `data-api-key` | Generated on `/create` | **Public**. Embedded in the widget script to authenticate chat sessions. |
+
+### 2. Critical Endpoints
+
+| Action | Method | Endpoint | Required Auth | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Create Client** | `POST` | `/api/clients/create` | *None* | Returns the initial `apiKey` and `adminKey`. |
+| **Update Settings** | `PUT` | `/api/clients/{clientId}/settings` | `X-Admin-Key` | Updates aesthetics and welcome messages. |
+| **Upload Docs** | `POST` | `/api/clients/{clientId}/documents` | `X-Admin-Key` | Multiplayer `FormData` upload. |
+| **Trigger Index** | `POST` | `/api/clients/{clientId}/index` | `X-Admin-Key` | Starts the RAG indexing process. |
+
+---
 
 ## 📂 Project Structure
 
-```
-├── public/
-│   └── widget.js       # The standalone script for embedding the widget
-├── src/
-│   ├── components/     # Reusable React components
-│   ├── hooks/          # Custom hooks (useSession, etc.)
-│   ├── pages/          # Application pages (Dashboard, Test Client)
-│   └── utils/          # API helpers and constants
-├── Dockerfile          # Frontend container definition
-└── nginx.conf          # Nginx configuration for serving the app
-```
-
-## 🧪 Testing
-
-Run the test suite:
-
 ```bash
-npm test
+src/
+├── animations/         # Lottie JSON animation files (Robot, UI elements)
+├── components/         # Reusable UI components
+│   ├── assistant-journey/ # Admin dashboard wizard steps
+│   └── ...
+├── pages/              # Main route views
+│   ├── AdminPage.jsx   # Client creation & management portal
+│   ├── TestClientPage.jsx # Playground for testing the widget
+│   └── ...
+├── sections/           # Landing page sections
+├── styles/             # Global CSS and utility classes
+└── utils/              # Helper functions and API wrappers
 ```
 
-## 📄 License
+---
 
-MIT
+## 🧩 Widget Embedding
+
+To deploy the chat assistant to a customer's website, use the following HTML snippet. Replace `${clientId}` with the actual ID generated from the Admin Panel.
+
+```html
+<script 
+  src="https://your-frontend-domain.com/widget.js"
+  data-api-key="${clientId}"
+  id="docuchat-widget-script"
+  defer>
+</script>
+```
+
+---
+
+*Documentation generated for DocuChat Frontend v0.1*
