@@ -90,7 +90,7 @@ The application relies on environment variables for API connectivity. Create a `
 
 ```env
 # URL for the backend API service
-VITE_API_BASE_URL=https://icas00-docchat.hf.space
+VITE_API_BASE_URL=
 ```
 
 > **Note**: If not provided, the application may default to hardcoded fallbacks for development. It is strongly recommended to define this variable.
